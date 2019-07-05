@@ -18,8 +18,6 @@ import com.moong.notice.domain.board.Board;
 import com.moong.notice.domain.board.BoardType;
 import com.moong.notice.service.BoardService;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * 조회 GET
  * 작성 POST
@@ -29,9 +27,12 @@ import lombok.RequiredArgsConstructor;
  **/
 @RestController
 @RequestMapping("/api/board")
-@RequiredArgsConstructor
 public class BoardController {
 	private final BoardService boardService;
+	
+	public BoardController(BoardService boardService) {
+		this.boardService = boardService;
+	}
 	
 	@GetMapping(value={"/{page}"})
 	public ApiResponse<?> getBoards(
