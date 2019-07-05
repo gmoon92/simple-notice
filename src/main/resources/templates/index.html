@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>공지사항 게시판</title>
+<link rel="stylesheet" type="text/css" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="css/template.css" />
+</head>
+<body>
+	<div class="container">
+		<h2>공지사항 게시판</h2>
+		<div class="row">
+			<div style="float:right;">
+				<button type="button" id="myBtn" class="btn btn-primary">글 작성</button>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-3">
+				<div class="input-group">
+					<input class="form-control" id="keyword" placeholder="검색어를 입력하세요." required> 
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default" id="keywordBtn">
+							<i class="glyphicon glyphicon-search"></i>
+						</button>
+					</span>
+				</div>
+			</div>
+
+			<div class="col-md-9">
+				<table class="table table-list-search">
+					<colgroup>
+				 		<col width="50%;">
+				 		<col width="10%;">
+				 		<col width="10%;">
+				 		<col width="10%;">
+				 	</colgroup>
+					<thead>
+						<tr>
+							<th>제목</th>
+							<th>작성자</th>
+							<th>작성일</th>
+							<th>최종수정일</th>
+						</tr>
+					</thead>
+					<tbody id="noticeContents">
+					</tbody>
+				</table>
+				
+				<div class="baordPaging">
+		        	<ul class="pagination">
+		            </ul>
+		       </div>
+			</div>
+		</div>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" role="dialog">
+		  <div class="modal-dialog">
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title" id="modalTitle">글 작성</h4>
+		      </div>
+		      <div class="modal-body">
+		        <div>
+					<input class="form-control" type="text" id="title" placeholder="제목을 입력하세요." required>
+		        </div>
+		        <div>
+		        	<textarea class="form-control" rows="10" id="contents" cols="30" placeholder="내용을 입력하세요." required></textarea>
+		        </div>
+		      </div>
+		      <div class="modal-footer">
+		        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+		        <button class="btn btn-primary" id="btnModal" onclick="createBoard();" data-dismiss="modal">저장</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+  </div>
+</body>
+<script type="text/javascript" src="webjars/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/template.js"></script>
+<script type="text/javascript" src="js/board.js"></script>
+</html>
