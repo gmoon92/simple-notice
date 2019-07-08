@@ -15,7 +15,7 @@ import com.moong.notice.domain.board.BoardType;
 
 public interface BoardRepository extends JpaRepository<Board, Long>{
 	
-	Page<Board> findByTypeAndTitleLike(BoardType type, String keyword, Pageable pageable);
+	Page<Board> findByTypeAndTitleContains(BoardType type, String keyword, Pageable pageable);
 	
 	
 	@Transactional
