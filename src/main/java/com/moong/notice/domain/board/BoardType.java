@@ -1,5 +1,7 @@
 package com.moong.notice.domain.board;
 
+import com.moong.notice.api.advice.exception.BoardTypeNotFoundException;
+
 /**
  * 게시판을 구분할 enum
  * @author moong
@@ -19,8 +21,7 @@ public enum BoardType {
 		switch (type) {
 			case 0: return BoardType.DEFAULT;
 			case 1: return BoardType.NOTICE;
-			default: throw new RuntimeException("타입이 없습니다.");
+			default: throw new BoardTypeNotFoundException(type);
 		}
 	}
-	
 }
