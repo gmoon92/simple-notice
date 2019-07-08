@@ -3,6 +3,11 @@ package com.moong.notice.api.response;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * 결과 데이터 확장성을 고려한 
+ * 결과 데이터의 구조를 표준화
+ * @author moong
+ **/
 @Getter @ToString
 public class ApiResponse<T> {
 
@@ -10,7 +15,7 @@ public class ApiResponse<T> {
 	private String message;
 	private T data;
 	
-	public ApiResponse(ApiResponseCode code
+	private ApiResponse(ApiResponseCode code
 					  ,String message
 					  ,T data
 			) {
