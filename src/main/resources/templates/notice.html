@@ -74,13 +74,20 @@
 		      </div>
 		      <div class="modal-footer">
 		        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
-		        <button class="btn btn-primary" id="btnModal" onclick="createBoard();" data-dismiss="modal">저장</button>
+		        <button class="btn btn-primary" id="btnModal" onclick="createBoard();">저장</button>
 		      </div>
 		    </div>
 		  </div>
 		</div>
   </div>
+  
+  <input type="hidden" id="userId" th:value="${session.loginUser.uId}">
 </body>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+	var uId = /*[[${session.loginUser.uId}]]*/; 
+/*]]>*/
+</script>
 <script type="text/javascript" src="webjars/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/template.js"></script>

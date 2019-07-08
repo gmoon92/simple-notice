@@ -30,7 +30,7 @@ function makeHtmlCode(params){
 			for(var rowIdx in resRowDatas){
 				var id 		 	 = resRowDatas[rowIdx].id;
 				var title 		 = resRowDatas[rowIdx].title || "";
-				var name 	 	 = resRowDatas[rowIdx].name || "";
+				var name 	 	 = resRowDatas[rowIdx].member.name || "";
 				var createdDate  = resRowDatas[rowIdx].createdDate.substr(0,10) || "";
 				var modifiedDate = resRowDatas[rowIdx].modifiedDate.substr(0,10) || "";
 				var contents 	 = resRowDatas[rowIdx].contents.replace(/(?:\r\n|\r|\n)/g, '<br />') || "";

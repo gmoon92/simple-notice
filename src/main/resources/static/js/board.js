@@ -2,7 +2,6 @@ $(document).ready(function () {
 	getBoardList();
 });
 
-
 function factoryBoards(){
 	return {
 		 setBoards : function(_boardList){
@@ -23,6 +22,7 @@ function getBoardList(pageNum){
 		 type: "GET"
 		,url: "/api/board/"+pageNum+"?type=1&keyword="+keyword
 		,success: function (resObj) {
+			console.log(resObj);
 			new factoryBoards().setBoards(resObj);
 			makeHtmlCode(resObj.data);
 		}
@@ -52,7 +52,9 @@ function createBoard() {
     	 title 	  : $("#title").val()
     	,contents : $("#contents").val()
     	,type	  : 1
+    	,u_id 	  : uId
     }
+    
     $.ajax({
          type: "POST"
         ,contentType: "application/json"
@@ -72,6 +74,7 @@ function updateBoard(id) {
 			 title 	  : $("#title").val()
 			,contents : $("#contents").val()
 			,type	  : 1
+			,u_id 	  : uId
 	}
 	$.ajax({
 		//type: "PUT"
