@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.moong.notice.domain.board.BoardType;
 import com.moong.notice.repository.BoardRepository;
+import com.moong.notice.repository.MemberRepository;
 import com.moong.notice.service.BoardService;
 
 
@@ -28,6 +29,7 @@ public class BoardControllerTest {
 	
 	@MockBean private BoardService boardService;
 	@MockBean private BoardRepository boardRepository;
+	@MockBean private MemberRepository memberRepository;
 	
 	private String PREFIX_URL = "/api/board/"; 
 
@@ -39,4 +41,6 @@ public class BoardControllerTest {
 			   ;
 		verify(boardService).findAll(any(BoardType.class),any(Integer.class), any(String.class));
 	}
+	
+	
 }

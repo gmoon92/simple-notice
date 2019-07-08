@@ -27,12 +27,12 @@ public class BoardRepositoryTest {
 
 	@Autowired
 	private BoardRepository boardRepository;
-	
+
 	@Before
 	public void setUp() {
 		boardRepository.deleteAll();
 	}
-
+	
 	@Test
 	public void 게시판_페이징_조회() {
 		for(int i=0; i<30; i++) {
@@ -46,7 +46,7 @@ public class BoardRepositoryTest {
 		Pageable pageable = PageRequest.of(0 // 조회할 페이지 번호
 										  ,3 // 페이지 수
 										  );
-		Page<Board> boards =  boardRepository.findByTypeAndTitleLike(BoardType.NOTICE,"%테스트%",pageable);
+		Page<Board> boards =  boardRepository.findByTypeAndTitleContains(BoardType.NOTICE,"테스트",pageable);
 		assertThat(boards.getContent()).hasSize(3);
 	}
 	
@@ -75,12 +75,12 @@ public class BoardRepositoryTest {
 	
 	@Test
 	public void 게시판_Update() {
-		boardRepository.save(Board.builder()
-					   .type(BoardType.NOTICE)
-					   .title("제목1")
-					   .build());
-		
-		Integer isUpdate = boardRepository.updateBoard(31L, Board.builder()
+		Board savedBoard = boardRepository.save(Board.builder()
+										  .type(BoardType.NOTICE)
+										  .title("제목1")
+										  .build());
+				
+		Integer isUpdate = boardRepository.updateBoard(savedBoard.getId(), Board.builder()
 										  .type(BoardType.NOTICE)
 										  .title("테스트")
 										  .build());

@@ -18,6 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.moong.notice.domain.board.Board;
 import com.moong.notice.domain.board.BoardType;
 import com.moong.notice.repository.BoardRepository;
+import com.moong.notice.repository.MemberRepository;
+import com.moong.notice.service.dto.BoardParam;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,6 +30,10 @@ public class BoardServiceTest {
 	
 	@Autowired
 	private BoardRepository boardRepository;
+	
+	@Autowired
+	private MemberRepository memberRepository;
+	
 	
 	@Before
 	public void setUp() {
@@ -48,18 +54,19 @@ public class BoardServiceTest {
 		}
 		boardRepository.saveAll(boards);
 		Page<Board> page = boardService.findAll(BoardType.NOTICE, 1, "제목");
-		
 		assertThat(page.getNumber(), is(1)); // 현제 페이지
-		assertThat(page.getTotalPages(), is(3)); // 전체 페이지수
+		assertThat(page.getTotalPages(), is(6)); // 전체 페이지수
 	}
 	
 	@Test
 	public void 게시판_저장() {
-		Board saveBoard = Board.builder()
-							   .title("제목")
-							   .type(BoardType.NOTICE)
-							   .build();
-		assertThat(boardService.save(saveBoard)).isEqualTo(saveBoard);
+		BoardParam saveBoard = BoardParam.builder()
+										 .title("제목")
+										 .type(BoardType.NOTICE)
+										 .u_id("moong")
+										 .member(memberRepository.findByUId("moong"))
+										 .build();
+		
+		assertThat(boardService.save(saveBoard).getTitle()).isEqualTo(saveBoard.getTitle());
 	}
-	
 }
