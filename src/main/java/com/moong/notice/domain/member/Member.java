@@ -30,7 +30,7 @@ import lombok.ToString;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(uniqueConstraints= {
-		@UniqueConstraint(columnNames = {"type", "uId"})
+		@UniqueConstraint(columnNames = {"rule", "uId"})
 })
 @Getter @Setter @NoArgsConstructor @ToString
 public class Member extends BaseEntity{
