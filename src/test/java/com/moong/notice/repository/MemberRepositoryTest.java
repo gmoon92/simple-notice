@@ -54,7 +54,7 @@ public class MemberRepositoryTest {
 		Board savedBoard = Board.builder()
 								.type(BoardType.NOTICE)
 								.title("제목")
-								.contents(new StringBuffer().append("내용 테스트1"))
+								.contents("감사합니다.")
 								.build();
 		savedBoard.setMember(loginMember);
 					// ^-- 회원 양방향 설정 

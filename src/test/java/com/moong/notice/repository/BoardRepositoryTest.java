@@ -16,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.moong.notice.domain.board.Board;
@@ -54,7 +56,7 @@ public class BoardRepositoryTest {
 	public void 게시판_Create() {
 		Board newBoard1 = Board.builder()
 							   .title("공지사항 게시판입니다.")
-							   .contents(new StringBuffer().append("감사합니다."))
+							   .contents("감사합니다.")
 							   .type(BoardType.NOTICE)
 							   .build();
 		
@@ -62,7 +64,7 @@ public class BoardRepositoryTest {
 		
 		Board newBoard2 = Board.builder()
 							   .title("일반 게시판입니다.")
-							   .contents(new StringBuffer().append("감사합니다."))
+							   .contents("감사합니다.")
 							   .type(BoardType.DEFAULT)
 							   .build();
 

@@ -22,7 +22,7 @@ public class BoardParam {
 	private String title;
 	
 	@NotEmpty // null, "" 허용 x,  " " 허용
-	private StringBuffer contents;
+	private String contents;
 	
 	@NotNull // null 허용 x, "", " " 허용
 	private BoardType type;
@@ -33,7 +33,7 @@ public class BoardParam {
 	private Member member;
 	
 	@Builder
-	public BoardParam(String title, StringBuffer contents, BoardType type, String u_id, Member member) {
+	public BoardParam(String title, String contents, BoardType type, String u_id, Member member) {
 		this.title = title;
 		this.contents = contents;
 		this.type = type;

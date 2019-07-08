@@ -40,8 +40,8 @@ public class Board extends BaseEntity{
 	@Column
 	private String title;
 	
-	@Lob
-	private StringBuffer contents;
+	@Column(length=4000)
+	private String contents;
 	
 	/**
 	* @ManyToOne는 기본적인 패치 전략은 EAGER
@@ -60,7 +60,7 @@ public class Board extends BaseEntity{
 	
 
 	@Builder
-	public Board(Long id, BoardType type, String title, StringBuffer contents) {
+	public Board(Long id, BoardType type, String title, String contents) {
 		this.id = id;
 		this.type = type;
 		this.title = title;

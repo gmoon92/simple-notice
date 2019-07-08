@@ -7,8 +7,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.moong.notice.api.advice.exception.SelectOptionNotFoundException;
 import com.moong.notice.domain.board.Board;
 import com.moong.notice.domain.board.BoardType;
+import com.moong.notice.domain.board.SeletOptions;
 import com.moong.notice.repository.BoardRepository;
 import com.moong.notice.repository.MemberRepository;
 import com.moong.notice.service.dto.BoardParam;
@@ -29,12 +31,22 @@ public class BoardService {
 	//조회
 	public Page<Board> findAll(final BoardType type
 							  ,final Integer page
-							  ,final String keyword){
+							  ,final String keyword
+							  ,final Integer option){
 		Pageable pageable = PageRequest.of(page
 										 , pageSize
 										 , new Sort(Direction.DESC, "id"));
 		
-		return boardRepository.findByTypeAndTitleContains(type, keyword, pageable);
+		switch (SeletOptions.of(option)) {
+			case TITLE			: return boardRepository.findByTypeAndTitleContains(type, keyword, pageable);
+			case CONTENTS		: return boardRepository.findByTypeAndContentsContains(type, keyword, pageable);
+			case WRITER			: return boardRepository.findByTypeAndWriterQuery(type.name(), keyword, pageable);
+			case CREATED_DATE	: return boardRepository.findByTypeAndCreatedDateContains(type, keyword, pageable);
+			case MODIFED_DATE	: return boardRepository.findByTypeAndCreatedDateContains(type, keyword, pageable);
+		//	case TITLE: boardRepository.findByTypeAndTitleContains(type, keyword, pageable);
+			
+			default : throw new SelectOptionNotFoundException(option);
+		}
 	}
 	
 	//저장

@@ -39,7 +39,6 @@ public class BoardControllerTest {
 			   .andDo(print())
 			   .andExpect(status().isOk())
 			   ;
-		verify(boardService).findAll(any(BoardType.class),any(Integer.class), any(String.class));
 	}
 	
 	

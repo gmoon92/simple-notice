@@ -17,12 +17,12 @@ function factoryBoards(){
 function getBoardList(pageNum){
 	var pageNum = pageNum || 1;
 	var keyword = $("#keyword").val() || "";
+	var options = $("#options option:selected").val();
 	
 	$.ajax({
 		 type: "GET"
-		,url: "/api/board/"+pageNum+"?type=1&keyword="+keyword
+		,url: "/api/board/"+pageNum+"?type=1&keyword="+keyword+"&option="+options
 		,success: function (resObj) {
-			console.log(resObj);
 			new factoryBoards().setBoards(resObj);
 			makeHtmlCode(resObj.data);
 		}

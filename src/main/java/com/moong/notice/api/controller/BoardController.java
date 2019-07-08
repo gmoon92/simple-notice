@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.moong.notice.api.response.ApiResponse;
 import com.moong.notice.aspect.BoardValidation;
 import com.moong.notice.domain.board.BoardType;
+import com.moong.notice.domain.board.SeletOptions;
 import com.moong.notice.domain.member.MemberRules;
 import com.moong.notice.service.BoardService;
 import com.moong.notice.service.dto.BoardParam;
@@ -39,10 +40,14 @@ public class BoardController {
 	public ApiResponse<?> getBoards(
 			 @PathVariable("page") Integer page
 			,@RequestParam(value="type", required=true) Integer type
+			,@RequestParam(value="option", required=true) Integer option
 			,@RequestParam(value="keyword", required=false, defaultValue="") String keyword
 			)
 	{
-		return ApiResponse.ok(boardService.findAll(BoardType.of(type), page-1, keyword));
+		return ApiResponse.ok(boardService.findAll(BoardType.of(type)
+												, page-1
+												, keyword
+												, option));
 	}
 	
 	@BoardValidation

@@ -35,7 +35,7 @@ public class JPAConfig {
 			for(int i=1; i<13; i++) {
 				Board savedBoard = Board.builder()
 										.title("제목"+i)
-										.contents(new StringBuffer().append("내용"))
+										.contents("내용")
 										.type(BoardType.NOTICE)
 										.build()
 										.setMember(loginMember);

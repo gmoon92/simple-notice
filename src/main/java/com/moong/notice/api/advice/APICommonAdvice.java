@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.moong.notice.api.advice.exception.BoardTypeNotFoundException;
+import com.moong.notice.api.advice.exception.SelectOptionNotFoundException;
 import com.moong.notice.api.advice.exception.UserNotFoundException;
 import com.moong.notice.api.response.ApiException;
 import com.moong.notice.api.response.ApiResponseCode;
@@ -28,6 +29,15 @@ public class APICommonAdvice {
 	protected ApiException<?> throwsTypeNotFound(BoardTypeNotFoundException e) {
 		e.printStackTrace();
 		ApiException exception = ApiException.of(ApiResponseCode.BAD_PARAMETER, e.getMessage());
+		errorLogs(exception);
+		return exception;
+	}
+	
+	@ExceptionHandler(SelectOptionNotFoundException.class)
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
+	protected ApiException<?> throwSelectOptionNotFound(SelectOptionNotFoundException e) {
+		e.printStackTrace();
+		ApiException exception = ApiException.withInfo(ApiResponseCode.BAD_PARAMETER, "요청한 셀렉트 옵션 파라미터가 잘못 되었습니다.");
 		errorLogs(exception);
 		return exception;
 	}

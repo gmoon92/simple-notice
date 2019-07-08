@@ -14,8 +14,18 @@ import com.moong.notice.domain.board.Board;
 import com.moong.notice.domain.board.BoardType;
 
 public interface BoardRepository extends JpaRepository<Board, Long>{
-	
+
+	Page<Board> findByTypeAndContentsContains(BoardType type, String keyword, Pageable pageable);
 	Page<Board> findByTypeAndTitleContains(BoardType type, String keyword, Pageable pageable);
+	Page<Board> findByTypeAndCreatedDateContains(BoardType type, String keyword, Pageable pageable);
+	
+	@Query(value="select b.* "
+			+ "	  from BOARD b"
+			+ "		  ,MEMBER m "
+			+ "where b.type = :type "
+			+ "  and m.u_id = :user_id "
+			, nativeQuery=true)
+	Page<Board> findByTypeAndWriterQuery(@Param("type")String type, @Param("user_id")String keyword, Pageable pageable);
 	
 	
 	@Transactional

@@ -3,7 +3,8 @@ $(document).ready(function () {
 });
 
 function eventManagement(){
-	$("#myBtn").click(function(){
+	$("#myBtn")
+	.click(function(){
 		openModal();
     });
 	
@@ -16,6 +17,20 @@ function eventManagement(){
 	$("#keywordBtn")
 	.click(function(e){
 		getBoardList();
+	});
+	
+	$("#options")
+	.change(function(e){
+		switch (Number($(this).val())) {
+			case 2: $("#keyword").attr("type", "date"); break;
+			case 4: $("#keyword").attr("type", "date"); break;
+
+			default:
+				$("#keyword").attr("type", "text");
+			break;
+		}
+		$("#keyword").val("");
+		
 	});
 }
 
