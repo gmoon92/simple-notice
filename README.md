@@ -6,7 +6,7 @@
 - JPA, H2
 - JUnit(AssertJ), Lombok, Maven
 
->~~추후 동적 쿼리와 객체 타입에 관련하여 Querydsl을 적용하여 개발할 예정~~
+>~~추후 Querydsl을 적용할 예정~~
 
 ## 구현 기능
 - 게시판 CURD(작성, 수정, 조회, 삭제)
@@ -18,8 +18,8 @@
 
 ## 프로젝트 실행
 
-Maven -> UpdateProject
-Run -> NoticeApplication
+1. Maven -> UpdateProject
+2. Run -> NoticeApplication
 
 포트 설정 9090
 - index - http://localhost:9090/
