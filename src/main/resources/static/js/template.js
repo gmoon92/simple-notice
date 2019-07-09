@@ -47,10 +47,15 @@ function makeHtmlCode(params){
 						  +"<td colspan='4' style='padding:3%;'>"+ contents +"</td>"
 						  
 						  +"<tr style='display:none;' id='btnArea"+id+"' class='contents'>"
-						  +"<td colspan='4' style='text-align:right;'>"
-						  +"<button class=\"btn btn-info\" onclick=\"openModal("+id+");\">수정</button>" 
-						  +"<button class=\"btn btn-danger\" onclick=\"deleteBoard("+id+");\">삭제</button>" 
-						  +"</td>"
+						  +"<td colspan='4' style='text-align:right;'>";
+				
+						  
+				if(uId==resRowDatas[rowIdx].member.uid){
+				htmlCode  +="<button class=\"btn btn-info\" onclick=\"openModal("+id+");\">수정</button>" 
+						  +"<button class=\"btn btn-danger\" onclick=\"deleteBoard("+id+");\">삭제</button>";
+				}
+						  
+				htmlCode  +="</td>"
 						  
 						  +"</tr>" ;
 			}
