@@ -1,5 +1,6 @@
 $(document).ready(function () {
 	getBoardList();
+	$("#end_ymd").val(new Date().toISOString().substring(0, 10));
 });
 
 function factoryBoards(){
@@ -14,14 +15,39 @@ function factoryBoards(){
 	}
 }
 
-function getBoardList(pageNum){
-	var pageNum = pageNum || 1;
-	var keyword = $("#keyword").val() || "";
-	var options = $("#options option:selected").val();
+function getBoardListValid(){
+	var warningStr = "은(는) 필수 입력값입니다.";
+	var oDate 	 = $("#option_date option:selected").val();
+	var oKeyword = $("#option_keyword option:selected").val();
+	var sta_ymd  = $("#sta_ymd").val();
+	var end_ymd  = $("#end_ymd").val();
 	
+	if(oDate == ""){ return alert("날짜 옵션"+ warningStr); }
+	if(sta_ymd == ""){ return alert("시작일"+ warningStr); }
+	if(end_ymd == ""){ return alert("종료일"+ warningStr); }
+	if(oKeyword == ""){ return alert("키워드 옵션"+ warningStr); }
+	return true;
+}
+
+function getBoardList(pageNum){
+	if(!getBoardListValid()){
+		return false;
+	}
+	
+	var pageNum = pageNum || 1;
+
+	var params = {
+			 type 			 : 1
+			,keyword 		 : $("#keyword").val() || ""
+			,option_keyword  : $("#option_keyword option:selected").val() || ""
+			,option_date  	 : $("#option_date option:selected").val() || ""
+			,sta_ymd  		 : $("#sta_ymd").val() || ""
+			,end_ymd  		 : $("#end_ymd").val() || ""
+	};
 	$.ajax({
 		 type: "GET"
-		,url: "/api/board/"+pageNum+"?type=1&keyword="+keyword+"&option="+options
+		,url: "/api/board/"+pageNum
+		,data : params
 		,success: function (resObj) {
 			new factoryBoards().setBoards(resObj);
 			makeHtmlCode(resObj.data);

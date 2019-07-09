@@ -1,7 +1,5 @@
 package com.moong.notice.api.controller;
 
-import java.time.LocalDateTime;
-
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -12,17 +10,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moong.notice.api.response.ApiResponse;
 import com.moong.notice.aspect.BoardValidation;
-import com.moong.notice.domain.board.BoardType;
 import com.moong.notice.domain.member.MemberRules;
 import com.moong.notice.service.BoardService;
 import com.moong.notice.service.dto.BoardParam;
 import com.moong.notice.service.dto.SearchParam;
-import com.moong.notice.service.dto.SelectOptions;
 
 import lombok.RequiredArgsConstructor;
 

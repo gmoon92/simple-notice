@@ -18,20 +18,6 @@ function eventManagement(){
 	.click(function(e){
 		getBoardList();
 	});
-	
-	$("#options")
-	.change(function(e){
-		switch (Number($(this).val())) {
-			case 2: $("#keyword").attr("type", "date"); break;
-			case 4: $("#keyword").attr("type", "date"); break;
-
-			default:
-				$("#keyword").attr("type", "text");
-			break;
-		}
-		$("#keyword").val("");
-		
-	});
 }
 
 function makeHtmlCode(params){

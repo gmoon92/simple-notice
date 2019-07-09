@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 
 import com.moong.notice.domain.board.BoardType;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 

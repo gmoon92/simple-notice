@@ -1,4 +1,4 @@
-package com.moong.notice.domain.board;
+package com.moong.notice.service.dto;
 
 import com.moong.notice.api.advice.exception.SelectOptionNotFoundException;
 
@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum SeletOptions {
+public enum SelectOptions {
 	 TITLE(1)
 	,CREATED_DATE(2)
 	,WRITER(3)
@@ -17,13 +17,13 @@ public enum SeletOptions {
 	
 	private final int option;
 	
-	public static SeletOptions of(int option) {
+	public static SelectOptions of(int option) {
 		switch (option) {
-			case 1: return SeletOptions.TITLE;
-			case 2: return SeletOptions.CREATED_DATE;
-			case 3: return SeletOptions.WRITER;
-			case 4: return SeletOptions.MODIFED_DATE;
-			case 5: return SeletOptions.CONTENTS;
+			case 1: return SelectOptions.TITLE;
+			case 2: return SelectOptions.CREATED_DATE;
+			case 3: return SelectOptions.WRITER;
+			case 4: return SelectOptions.MODIFED_DATE;
+			case 5: return SelectOptions.CONTENTS;
 			default: throw new SelectOptionNotFoundException(option);
 		}
 	}
