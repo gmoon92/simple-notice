@@ -17,10 +17,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.moong.notice.domain.board.Board;
 import com.moong.notice.domain.board.BoardType;
-import com.moong.notice.domain.board.SeletOptions;
 import com.moong.notice.repository.BoardRepository;
 import com.moong.notice.repository.MemberRepository;
 import com.moong.notice.service.dto.BoardParam;
+import com.moong.notice.service.dto.SearchParam;
+import com.moong.notice.service.dto.SelectOptions;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -44,7 +45,7 @@ public class BoardServiceTest {
 	@Test
 	public void 게시판_페이징_조회() {
 		List<Board> boards = new ArrayList<Board>();
-		for(int i=0; i<30; i++) {
+		for(int i=0; i<10; i++) {
 			boards.add(
 					Board.builder()
 						 .title("제목" + i)
@@ -54,9 +55,18 @@ public class BoardServiceTest {
 					);
 		}
 		boardRepository.saveAll(boards);
-		Page<Board> page = boardService.findAll(BoardType.NOTICE, 1, "제목", 1);
-		assertThat(page.getNumber(), is(1)); // 현제 페이지
-		assertThat(page.getTotalPages(), is(6)); // 전체 페이지수
+		
+		SearchParam params = new SearchParam();
+					params.setSta_ymd("2019-01-01");
+					params.setEnd_ymd("2099-12-01");
+					params.setKeyword("");
+					params.setType(BoardType.NOTICE.getType());
+					params.setOption_date(SelectOptions.CREATED_DATE.getOption());
+					params.setOption_keyword(SelectOptions.TITLE.getOption());
+					System.out.println(params);
+		Page<Board> page = boardService.findAll(1, params);
+		assertThat(page.getNumber(), is(0)); // 현제 페이지
+		assertThat(page.getTotalPages(), is(2)); // 전체 페이지수
 	}
 	
 	@Test

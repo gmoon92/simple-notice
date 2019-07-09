@@ -3,6 +3,9 @@ package com.moong.notice.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,26 +22,36 @@ import com.moong.notice.repository.MemberRepository;
 @Configuration
 public class JPAConfig {
 
+	@PersistenceContext
+	private EntityManager em;
+	
 	@Bean
 	public CommandLineRunner setUp(BoardRepository boardRepository
 								,MemberRepository memberRepository){
 		return (args) -> {
-			Member loginMember = memberRepository.save(Member.builder()
-															 .uId("moong")
-															 .uPw("1234")
-															 .rule(MemberRules.ADMIN)
-															 .name("문겸")
-															 .build());
+			Member user1 = memberRepository.save(Member.builder()
+													   .uId("moong")
+													   .uPw("1234")
+													   .rule(MemberRules.ADMIN)
+													   .name("문겸")
+													   .build());
+			Member user2 = memberRepository.save(Member.builder()
+									       .uId("moong2")
+									       .uPw("1234")
+									       .rule(MemberRules.ADMIN)
+									       .name("테스트")
+									       .build());
+			
 			
 			List<Board> boards = new ArrayList<Board>();
 		
-			for(int i=1; i<13; i++) {
+			for(int i=0; i<10; i++) {
 				Board savedBoard = Board.builder()
 										.title("제목"+i)
 										.contents("내용")
 										.type(BoardType.NOTICE)
 										.build()
-										.setMember(loginMember);
+										.setMember( i%2==0 ? user1 : user2);
 				boards.add(savedBoard);
 			}
 			boardRepository.saveAll(boards);

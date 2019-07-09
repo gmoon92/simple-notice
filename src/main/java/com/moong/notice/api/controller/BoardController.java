@@ -1,5 +1,7 @@
 package com.moong.notice.api.controller;
 
+import java.time.LocalDateTime;
+
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.moong.notice.api.response.ApiResponse;
 import com.moong.notice.aspect.BoardValidation;
 import com.moong.notice.domain.board.BoardType;
-import com.moong.notice.domain.board.SeletOptions;
 import com.moong.notice.domain.member.MemberRules;
 import com.moong.notice.service.BoardService;
 import com.moong.notice.service.dto.BoardParam;
+import com.moong.notice.service.dto.SearchParam;
+import com.moong.notice.service.dto.SelectOptions;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,19 +38,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BoardController {
 	private final BoardService boardService;
-
+	
 	@GetMapping(value={"/{page}"})
 	public ApiResponse<?> getBoards(
-			 @PathVariable("page") Integer page
-			,@RequestParam(value="type", required=true) Integer type
-			,@RequestParam(value="option", required=true) Integer option
-			,@RequestParam(value="keyword", required=false, defaultValue="") String keyword
-			)
-	{
-		return ApiResponse.ok(boardService.findAll(BoardType.of(type)
-												, page-1
-												, keyword
-												, option));
+			@PathVariable("page") Integer page
+		   ,@Valid SearchParam params ){
+		return ApiResponse.ok(boardService.findAll(page, params));
 	}
 	
 	@BoardValidation

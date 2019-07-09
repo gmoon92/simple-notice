@@ -1,5 +1,6 @@
 package com.moong.notice.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -12,22 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.moong.notice.domain.board.Board;
 import com.moong.notice.domain.board.BoardType;
+import com.moong.notice.service.dto.SearchParam;
 
 public interface BoardRepository extends JpaRepository<Board, Long>{
 
-	Page<Board> findByTypeAndContentsContains(BoardType type, String keyword, Pageable pageable);
-	Page<Board> findByTypeAndTitleContains(BoardType type, String keyword, Pageable pageable);
-	Page<Board> findByTypeAndCreatedDateContains(BoardType type, String keyword, Pageable pageable);
-	
-	@Query(value="select b.* "
-			+ "	  from BOARD b"
-			+ "		  ,MEMBER m "
-			+ "where b.type = :type "
-			+ "  and m.u_id = :user_id "
-			, nativeQuery=true)
-	Page<Board> findByTypeAndWriterQuery(@Param("type")String type, @Param("user_id")String keyword, Pageable pageable);
-	
-	
+	Page<Board> findByTypeAndTitleContains(BoardType type, String title, Pageable pageable);
+											
 	@Transactional
 	@Modifying
 	@Query(value="update BOARD b "
@@ -44,4 +35,47 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 	@Modifying
 	@Query(value="delete from BOARD b where b.id in :ids", nativeQuery=true)
 	void deleteALLByIdQuery(@Param("ids") List<Long> ids);
+	
+	// 생성일자, 내용 조회
+	Page<Board> findByTypeAndContentsContainsAndCreatedDateBetween(BoardType type
+			, String keyword
+			, LocalDateTime sta, LocalDateTime end, Pageable pageable);
+
+	// 생성일자, 제목 조회
+	Page<Board> findByTypeAndTitleContainsAndCreatedDateBetween(BoardType type
+			, String keyword
+			, LocalDateTime sta, LocalDateTime end, Pageable pageable);
+
+	// 생성일자, 작성자 조회
+	@Query(value="select b.* "
+			+ "	  from BOARD b"
+			+ "		  ,MEMBER m "
+			+ "where b.member_id = m.id "
+			+ "  and b.type = :type "
+			+ "  and m.name = :name "
+			+ "  and m.created_date between :sta and :end "
+			, nativeQuery=true)
+	Page<Board> findByTypeAndWriterCreatedDateBetweenQuery(@Param("type")String type
+			, @Param("name")String keyword
+			, @Param("sta")LocalDateTime sta, @Param("end")LocalDateTime end, Pageable pageable);
+
+
+	// 수정일자, 내용 조회
+	Page<Board> findByTypeAndContentsContainsAndModifiedDateBetween(BoardType type, String keyword, LocalDateTime sta, LocalDateTime end, Pageable pageable);
+	// 수정일자, 제목 조회
+	Page<Board> findByTypeAndTitleContainsAndModifiedDateBetween(BoardType type, String keyword, LocalDateTime sta, LocalDateTime end, Pageable pageable);
+
+	// 수정일자, 작성자 조회
+	@Query(value="select b.* "
+			+ "	  from BOARD b"
+			+ "		  ,MEMBER m "
+			+ "where b.member_id = m.id "
+			+ "  and b.type = :type "
+			+ "  and m.name = :name "
+			+ "  and m.created_date between :sta and :end "
+			, nativeQuery=true)
+	Page<Board> findByTypeAndWriterModifiedDateBetweenQuery(@Param("type")String type
+			, @Param("name")String keyword
+			, @Param("sta")LocalDateTime sta, @Param("end")LocalDateTime end, Pageable pageable);
+
 }

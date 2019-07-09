@@ -7,6 +7,10 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
+import org.hibernate.criterion.CriteriaQuery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.moong.notice.domain.board.Board;
 import com.moong.notice.domain.board.BoardType;
+import com.moong.notice.service.dto.SearchParam;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -30,6 +35,9 @@ public class BoardRepositoryTest {
 	@Autowired
 	private BoardRepository boardRepository;
 
+	@Autowired
+	private EntityManager em;
+	
 	@Before
 	public void setUp() {
 		boardRepository.deleteAll();
@@ -48,7 +56,7 @@ public class BoardRepositoryTest {
 		Pageable pageable = PageRequest.of(0 // 조회할 페이지 번호
 										  ,3 // 페이지 수
 										  );
-		Page<Board> boards =  boardRepository.findByTypeAndTitleContains(BoardType.NOTICE,"테스트",pageable);
+		Page<Board> boards =  boardRepository.findByTypeAndTitleContains(BoardType.NOTICE,"테스트", pageable);
 		assertThat(boards.getContent()).hasSize(3);
 	}
 	

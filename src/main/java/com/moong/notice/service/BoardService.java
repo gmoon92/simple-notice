@@ -7,46 +7,82 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.moong.notice.api.advice.exception.SelectOptionNotFoundException;
 import com.moong.notice.domain.board.Board;
-import com.moong.notice.domain.board.BoardType;
-import com.moong.notice.domain.board.SeletOptions;
 import com.moong.notice.repository.BoardRepository;
-import com.moong.notice.repository.MemberRepository;
 import com.moong.notice.service.dto.BoardParam;
+import com.moong.notice.service.dto.SearchParam;
+import com.moong.notice.service.dto.SelectOptions;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class BoardService {
-	private final MemberRepository memberRepository;
+
 	private final BoardRepository boardRepository;
-	private final int pageSize = 5;
-	
-	public BoardService(BoardRepository boardRepository
-					   ,MemberRepository memberRepository
-						) {
-		this.boardRepository = boardRepository;
-		this.memberRepository = memberRepository;
-	}
 	
 	//조회
-	public Page<Board> findAll(final BoardType type
-							  ,final Integer page
-							  ,final String keyword
-							  ,final Integer option){
-		Pageable pageable = PageRequest.of(page
-										 , pageSize
+	public Page<Board> findAll(final Integer page
+							 , final SearchParam params){
+		Pageable pageable = PageRequest.of(page-1 // view에서 페이지 번호로 직접 넘겨줌, jpa 시작은 0 부터
+										 , 5 // page block limit
 										 , new Sort(Direction.DESC, "id"));
 		
-		switch (SeletOptions.of(option)) {
-			case TITLE			: return boardRepository.findByTypeAndTitleContains(type, keyword, pageable);
-			case CONTENTS		: return boardRepository.findByTypeAndContentsContains(type, keyword, pageable);
-			case WRITER			: return boardRepository.findByTypeAndWriterQuery(type.name(), keyword, pageable);
-			case CREATED_DATE	: return boardRepository.findByTypeAndCreatedDateContains(type, keyword, pageable);
-			case MODIFED_DATE	: return boardRepository.findByTypeAndCreatedDateContains(type, keyword, pageable);
-		//	case TITLE: boardRepository.findByTypeAndTitleContains(type, keyword, pageable);
-			
-			default : throw new SelectOptionNotFoundException(option);
+		SelectOptions oDate    = params.getOption_date();
+		SelectOptions oKeyword = params.getOption_keyword();
+		switch (oDate) {
+			case CREATED_DATE:
+				switch (oKeyword) {
+					case CONTENTS: return boardRepository
+								.findByTypeAndContentsContainsAndCreatedDateBetween( params.getType()
+																					,params.getKeyword()
+																					,params.getSta_ymd()
+																					,params.getEnd_ymd()
+																					,pageable);
+					case TITLE:
+						return boardRepository
+								.findByTypeAndTitleContainsAndCreatedDateBetween( params.getType()
+																				 ,params.getKeyword()
+																				 ,params.getSta_ymd()
+																				 ,params.getEnd_ymd()
+																				 ,pageable);
+					case WRITER:
+						return boardRepository
+								.findByTypeAndWriterCreatedDateBetweenQuery( params.getType().name()
+																			,params.getKeyword()
+																			,params.getSta_ymd()
+																			,params.getEnd_ymd()
+																			,pageable);
+				}
+					
+			break;
+			case MODIFED_DATE:
+				switch (oKeyword) {
+					case CONTENTS: return boardRepository
+								.findByTypeAndContentsContainsAndModifiedDateBetween( params.getType()
+																					,params.getKeyword()
+																					,params.getSta_ymd()
+																					,params.getEnd_ymd()
+																					,pageable);
+					case TITLE:
+						return boardRepository
+								.findByTypeAndTitleContainsAndModifiedDateBetween( params.getType()
+																				 ,params.getKeyword()
+																				 ,params.getSta_ymd()
+																				 ,params.getEnd_ymd()
+																				 ,pageable);
+					case WRITER:
+						return boardRepository
+								.findByTypeAndWriterModifiedDateBetweenQuery( params.getType().name()
+																			,params.getKeyword()
+																			,params.getSta_ymd()
+																			,params.getEnd_ymd()
+																			,pageable);
+				}
+			break;
 		}
+		
+		return null;
 	}
 	
 	//저장
