@@ -18,6 +18,9 @@
 
 ## 프로젝트 실행
 
+명령프롬프트(CMD) 방법
+> $ java -jar notice-0.0.1-SNAPSHOT.jar
+
 1. Maven -> UpdateProject
 2. Run -> NoticeApplication
 
