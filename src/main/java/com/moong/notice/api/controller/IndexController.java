@@ -21,7 +21,7 @@ public class IndexController {
 		Member loginUser = memberRepository.findByUId("moong");
 		HttpSession session = request.getSession(true);
 		session.setAttribute("loginUser", loginUser);
-		return "/notice";
+		return "notice";
 	}
 
 }

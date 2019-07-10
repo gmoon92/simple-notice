@@ -5,6 +5,15 @@ import com.moong.notice.api.advice.exception.SelectOptionNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * <p>화면 Select 기준 값
+ * <li> 1 TITLE
+ * <li> 2 CREATE DATE
+ * <li> 3 WRITER
+ * <li> 4 MODIFED DATE
+ * <li> 5.CONTETNS 
+ * @author moong
+ **/
 @Getter
 @RequiredArgsConstructor
 public enum SelectOptions {

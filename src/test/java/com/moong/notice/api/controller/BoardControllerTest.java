@@ -1,7 +1,5 @@
 package com.moong.notice.api.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,6 +16,7 @@ import com.moong.notice.domain.board.BoardType;
 import com.moong.notice.repository.BoardRepository;
 import com.moong.notice.repository.MemberRepository;
 import com.moong.notice.service.BoardService;
+import com.moong.notice.service.dto.SelectOptions;
 
 
 @RunWith(SpringRunner.class)
@@ -35,11 +34,15 @@ public class BoardControllerTest {
 
 	@Test
 	public void 전체_게시판_조회() throws Exception{
-		mockMvc.perform(get(PREFIX_URL+"/1?type=1&keyword=제목"))
+		mockMvc.perform(get(PREFIX_URL+"/1"
+								      +"?type="+BoardType.NOTICE.getType()
+								      +"&option_date="+SelectOptions.CREATED_DATE.getOption()
+								      +"&option_keyword="+SelectOptions.TITLE.getOption()
+								      +"&sta_ymd=2019-01-01"
+								      +"&end_ymd=2019-07-30"
+								      ))
 			   .andDo(print())
 			   .andExpect(status().isOk())
 			   ;
 	}
-	
-	
 }
