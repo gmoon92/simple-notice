@@ -34,7 +34,6 @@ function makeHtmlCode(params){
 				var name 	 	 = resRowDatas[rowIdx].member.name || "";
 				var createdDate  = resRowDatas[rowIdx].createdDate.substr(0,10) || "";
 				var modifiedDate = resRowDatas[rowIdx].modifiedDate.substr(0,10) || "";
-				var contents 	 = resRowDatas[rowIdx].contents.replace(/(?:\r\n|\r|\n)/g, '<br />') || "";
 				
 				htmlCode +="<tr onclick='triggerContents("+id+")'>"
 						  +"<td>"+ title +"</td>" 
@@ -44,27 +43,31 @@ function makeHtmlCode(params){
 						  +"</tr>" 
 						  
 						  +"<tr style='display:none;' id='contents"+id+"' class='contents'>"
-						  +"<td colspan='4' style='padding:3%;'>"+ contents +"</td>"
+						  +"<td colspan='4' style='padding:3%;' id='contents"+rowIdx+"'></td>"
 						  
 						  +"<tr style='display:none;' id='btnArea"+id+"' class='contents'>"
 						  +"<td colspan='4' style='text-align:right;'>";
 				
-						  
 				if(uId==resRowDatas[rowIdx].member.uid){
 				htmlCode  +="<button class=\"btn btn-info\" onclick=\"openModal("+id+");\">수정</button>" 
 						  +"<button class=\"btn btn-danger\" onclick=\"deleteBoard("+id+");\">삭제</button>";
 				}
-						  
 				htmlCode  +="</td>"
-						  
 						  +"</tr>" ;
+				$selector.html(htmlCode);
+			}
+			
+			for(var rowIdx in resRowDatas){
+				var contents 	 = resRowDatas[rowIdx].contents.replace(/(?:\r\n|\r|\n)/g, '<br />') || "";
+				$("#contents"+rowIdx).text(contents);
 			}
 		}else{
 			htmlCode +="<tr>"
 					  +"<td colspan='4' align='center'>'"+ $("#keyword").val() + "'에 대한 검색결과가 없습니다.</td>"
 				 	  +"</tr>";
+			
+			$selector.html(htmlCode);
 		}
-		$selector.html(htmlCode);
 	}
 	
 	function makePageNationHtmlCode(params){
