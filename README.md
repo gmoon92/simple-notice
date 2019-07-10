@@ -18,13 +18,13 @@
 
 ## 프로젝트 실행
 
->참고] 포트 설정 9090
->- index - http://localhost:9090/
->- H2    - http://localhost:9090/h2-console
-
 #### 명령프롬프트(CMD) 방법
 > $ java -jar notice-0.0.1-SNAPSHOT.jar
 
 #### 메이븐 프로젝트 실행 방법
 1. Maven -> UpdateProject
 2. Run -> NoticeApplication
+
+>참고] 포트 설정 9090
+>- index - http://localhost:9090/
+>- H2    - http://localhost:9090/h2-console
