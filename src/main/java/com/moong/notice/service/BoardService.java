@@ -6,9 +6,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.moong.notice.aspect.BoardValidation;
 import com.moong.notice.domain.board.Board;
+import com.moong.notice.domain.member.Member;
+import com.moong.notice.domain.member.MemberRules;
 import com.moong.notice.repository.BoardRepository;
+import com.moong.notice.repository.MemberRepository;
 import com.moong.notice.service.dto.BoardParam;
 import com.moong.notice.service.dto.SearchParam;
 import com.moong.notice.service.dto.SelectOptions;
@@ -28,6 +33,8 @@ public class BoardService {
 										 , 5 // page block limit
 										 , new Sort(Direction.DESC, "id"));
 		
+		return boardRepository.findSearchQuery(params, pageable);
+		/*
 		SelectOptions oDate    = params.getOption_date();
 		SelectOptions oKeyword = params.getOption_keyword();
 		switch (oDate) {
@@ -81,21 +88,27 @@ public class BoardService {
 				}
 			break;
 		}
-		
 		return null;
+		*/
 	}
 	
 	//저장
+	@BoardValidation
+	@Transactional
 	public Board save(final BoardParam boardPrams) {
 		return boardRepository.save(boardPrams.toEntity());
 	}
 	
 	//수정
+	@BoardValidation
+	@Transactional
 	public Integer update(final Long id, final BoardParam boardPrams) {
 		return boardRepository.updateBoard(id, boardPrams.toEntity());
 	}
 	
 	//삭제
+	@BoardValidation(value=MemberRules.ADMIN)
+	@Transactional
 	public void delete(final Long id) {
 		boardRepository.deleteById(id);
 	}

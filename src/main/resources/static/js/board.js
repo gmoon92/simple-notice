@@ -64,10 +64,9 @@ function deleteBoard(id){
 		,contentType: "application/json"
 		,url: "/api/board/" + id
 		,success: function (resObj) {
-			if(resObj == "SUCCESS"){
+			if(resObj.data == "SUCCESS"){
 				getBoardList();
 			}
-			$("#myModal").modal("hide");
 		}
 		,error: function (resObj) {}
 	});

@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -32,7 +31,7 @@ import lombok.ToString;
 @Table(uniqueConstraints= {
 		@UniqueConstraint(columnNames = {"rule", "uId"})
 })
-@Getter @Setter @NoArgsConstructor @ToString
+@Getter @Setter @NoArgsConstructor
 public class Member extends BaseEntity{
 
 	@Id
@@ -54,8 +53,11 @@ public class Member extends BaseEntity{
 	
 	/**
 	 * @OneToMany 기본 패치전략은 LAZY
+	 * N:1
 	 **/
-	@OneToMany(mappedBy="member", fetch=FetchType.EAGER) // 양방향 주체 설정
+	@OneToMany(mappedBy="member" // 양방향 연관 관계 주체 설정(Board.member)
+			 // ,fetch = FetchType.EAGER )
+			)
 	@JsonIgnore // 역참조가 될 수 없게 (@JsonBackReference 동일한 효과)
 	private List<Board> boards = new ArrayList<Board>();
 	

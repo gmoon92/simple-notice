@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import com.moong.notice.domain.common.BaseEntity;
@@ -28,9 +27,8 @@ import lombok.ToString;
 			,@AttributeOverride(name="modifiedDate", column=@Column(name="MOD_DATE"))
 		})
 public class Board extends BaseEntity{
-
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.IDENTITY) // 데이터 베이스에 위임
 	private Long id;
 	
 	@Column(nullable=false, updatable=false)
@@ -54,10 +52,9 @@ public class Board extends BaseEntity{
 	* 
 	* 양방향 참조는 결과적으로 JSON에 위배
 	**/
-	@ManyToOne
-	@JoinColumn(name="member_id")
-	private Member member;
-	
+	@ManyToOne// 객체 연관 관계 설정 & 외래키와 참조 맵핑
+	@JoinColumn(name="member_id") // FK 매핑 설정
+	private Member member; // 데이터 중심이 아닌 객체 중심으로 설계하기 위함
 
 	@Builder
 	public Board(Long id, BoardType type, String title, String contents) {

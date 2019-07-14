@@ -35,17 +35,18 @@ function makeHtmlCode(params){
 				var createdDate  = resRowDatas[rowIdx].createdDate.substr(0,10) || "";
 				var modifiedDate = resRowDatas[rowIdx].modifiedDate.substr(0,10) || "";
 				
-				htmlCode +="<tr onclick='triggerContents("+id+")'>"
+				htmlCode +="<tr onclick='triggerContents("+rowIdx+")'>"
 						  +"<td>"+ title +"</td>" 
 						  +"<td>"+ name +"</td>" 
 						  +"<td>"+ createdDate +"</td>" 
 						  +"<td>"+ modifiedDate +"</td>"
 						  +"</tr>" 
 						  
-						  +"<tr style='display:none;' id='contents"+id+"' class='contents'>"
-						  +"<td colspan='4' style='padding:3%;' id='contents"+rowIdx+"'></td>"
-						  
-						  +"<tr style='display:none;' id='btnArea"+id+"' class='contents'>"
+						  +"<tr style='display:none;' id='contents"+rowIdx+"' class='contents'>"
+						  +"<td colspan='4' style='padding:3%;' >"
+						  +"<pre></pre>"
+						  +"</td>"
+						  +"<tr style='display:none;' id='btnArea"+rowIdx+"' class='contents'>"
 						  +"<td colspan='4' style='text-align:right;'>";
 				
 				if(uId==resRowDatas[rowIdx].member.uid){
@@ -58,8 +59,9 @@ function makeHtmlCode(params){
 			}
 			
 			for(var rowIdx in resRowDatas){
-				var contents 	 = resRowDatas[rowIdx].contents.replace(/(?:\r\n|\r|\n)/g, '<br />') || "";
-				$("#contents"+rowIdx).text(contents);
+				var contents 	 = resRowDatas[rowIdx].contents;
+				$("#contents"+rowIdx +" pre").text(contents);
+				
 			}
 		}else{
 			htmlCode +="<tr>"

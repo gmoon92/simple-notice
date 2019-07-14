@@ -41,13 +41,11 @@ public class BoardController {
 		return ApiResponse.ok(boardService.findAll(page, params));
 	}
 	
-	@BoardValidation
 	@PostMapping(path="/")
 	public ApiResponse<?> createBoard(@RequestBody @Valid BoardParam board ){
 		return ApiResponse.ok(boardService.save(board));
 	}
 	
-	@BoardValidation
 	//@PutMapping(path="/{id}") // <- 전체 리소스 바뀔 우려 때문에 Patch로 설정
 	@PatchMapping(path="/{id}")
 	public ApiResponse<?> updateBoard(
@@ -56,12 +54,11 @@ public class BoardController {
 		return ApiResponse.ok(boardService.update(id, boardPrams));
 	}
 	
-	@BoardValidation(value=MemberRules.ADMIN)
 	@DeleteMapping(path="/{id}")
-	public ResponseEntity<String> deleteBoard(
+	public ApiResponse<?> deleteBoard(
 			@PathVariable("id") @Valid Long id){
 		boardService.delete(id);
-		return ResponseEntity.ok("SUCCESS");
+		return ApiResponse.ok("SUCCESS");
 	}
 	
 }

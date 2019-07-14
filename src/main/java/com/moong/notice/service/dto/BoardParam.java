@@ -18,16 +18,16 @@ import lombok.ToString;
 @NoArgsConstructor
 public class BoardParam {
 	
-	@NotEmpty // null, "" 허용 x,  " " 허용
+	@NotEmpty // 허용 [x] null, "" / 허용 " " 
 	private String title;
 	
-	@NotEmpty // null, "" 허용 x,  " " 허용
+	@NotEmpty // 허용 [x] null, "" / 허용 " "
 	private String contents;
 	
-	@NotNull // null 허용 x, "", " " 허용
+	@NotNull // 허용 [x] null  / 허용 "", " " 
 	private BoardType type;
 	
-	@NotBlank // null, "", " " 허용 x
+	@NotBlank // 허용 [x] null, "", " " 
 	private String u_id;
 	
 	private Member member;

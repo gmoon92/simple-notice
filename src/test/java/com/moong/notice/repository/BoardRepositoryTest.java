@@ -8,10 +8,8 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import javax.persistence.EntityTransaction;
 
-import org.hibernate.criterion.CriteriaQuery;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,20 +18,26 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.moong.notice.domain.board.Board;
 import com.moong.notice.domain.board.BoardType;
+import com.moong.notice.domain.member.Member;
+import com.moong.notice.domain.member.MemberRules;
 import com.moong.notice.service.dto.SearchParam;
+import com.moong.notice.service.dto.SelectOptions;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@EnableJpaAuditing
 public class BoardRepositoryTest {
 
 	@Autowired
 	private BoardRepository boardRepository;
+	
+	@Autowired
+	private MemberRepository memberRepository;
 
 	@Autowired
 	private EntityManager em;
@@ -41,6 +45,39 @@ public class BoardRepositoryTest {
 	@Before
 	public void setUp() {
 		boardRepository.deleteAll();
+	}
+	
+	@Test
+	public void 게시판_동적_조회_통합() {
+		Member user1 = memberRepository.save(Member.builder()
+		   .uId("moong")
+		   .uPw("1234")
+		   .rule(MemberRules.ADMIN)
+		   .name("문겸")
+		   .build() );
+		
+		for(int i=0; i<3; i++) {
+			Board savedBoard = Board.builder()
+									.title("제목"+i)
+									.contents("내용")
+									.type(BoardType.NOTICE)
+									.build()
+									.setMember( user1 );
+			boardRepository.save(savedBoard);
+		}
+		
+		SearchParam params = new SearchParam();
+		params.setType(BoardType.NOTICE.getType());
+		params.setOption_date(SelectOptions.CREATED_DATE.getOption());
+		params.setOption_keyword(SelectOptions.TITLE.getOption());
+		params.setKeyword("");
+		params.setSta_ymd("2011-01-01");
+		params.setEnd_ymd("2020-01-01");
+		
+		Pageable pageable = PageRequest.of(0, 3);
+		Page<Board> boards =  boardRepository.findSearchQuery(params, pageable);
+		
+		System.err.println(boards.getSize());
 	}
 	
 	@Test
@@ -138,7 +175,7 @@ public class BoardRepositoryTest {
 		assertThat(boardRepository.count(), is(0L));
 	}
 	
-	@After
+	//@After
 	public void logs() {
 		boardRepository.findAll()
 		   			   .forEach(System.err::println);

@@ -15,13 +15,13 @@ import lombok.ToString;
 public class SearchParam {
 
 	@NotNull // null 허용 x, "", " " 허용
-	private BoardType type;
+	private String type;
 	
 	@NotNull // null 허용 x, "", " " 허용
-	private SelectOptions option_date;
+	private String option_date;
 	
 	@NotNull // null 허용 x, "", " " 허용
-	private SelectOptions option_keyword;
+	private String option_keyword;
 
 	@NotNull // null 허용 x, "", " " 허용
 	private LocalDateTime sta_ymd;
@@ -33,7 +33,7 @@ public class SearchParam {
 
 	// setter
 	public void setType(Integer type) {
-		this.type = BoardType.of(type); 
+		this.type = BoardType.of(type).name(); 
 	}
 
 	public void setSta_ymd(String sta_ymd) {
@@ -45,11 +45,11 @@ public class SearchParam {
 	}
 	
 	public void setOption_date(Integer option_date) {
-		this.option_date = SelectOptions.of(option_date);
+		this.option_date = SelectOptions.of(option_date).name();
 	}
 	
 	public void setOption_keyword(Integer option_keyword) {
-		this.option_keyword = SelectOptions.of(option_keyword);
+		this.option_keyword = SelectOptions.of(option_keyword).name();
 	}
 	
 	public void setKeyword(String keyword) {
