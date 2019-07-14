@@ -108,7 +108,6 @@ public class BoardService {
 	
 	//삭제
 	@BoardValidation(value=MemberRules.ADMIN)
-	@Transactional
 	public void delete(final Long id) {
 		boardRepository.deleteById(id);
 	}
