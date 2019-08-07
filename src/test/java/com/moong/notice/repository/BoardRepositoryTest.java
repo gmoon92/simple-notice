@@ -170,6 +170,7 @@ public class BoardRepositoryTest {
 						   		 .title("제목2")
 						   		 .build()
 				 );
+		 
 		boardRepository.saveAll(savedBoards);
 		boardRepository.deleteALLByIdQuery(boardRepository.findAllIdQuery());
 		assertThat(boardRepository.count(), is(0L));

@@ -24,7 +24,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 ### 과제 요구사항
  **/
 @SpringBootApplication
-public class NoticeApplication { 
+class NoticeApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NoticeApplication.class, args);
 	}

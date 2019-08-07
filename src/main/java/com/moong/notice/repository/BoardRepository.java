@@ -64,7 +64,6 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 			, LocalDateTime sta, LocalDateTime end, Pageable pageable);
 
 	// 생성일자, 제목 조회
-	@Deprecated
 	Page<Board> findByTypeAndTitleContainsAndCreatedDateBetween(BoardType type
 			, String keyword
 			, LocalDateTime sta, LocalDateTime end, Pageable pageable);

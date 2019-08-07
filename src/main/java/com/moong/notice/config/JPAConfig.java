@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +25,10 @@ public class JPAConfig {
 
 	@PersistenceContext
 	private EntityManager em;
-	
+
+	@Bean
+	public JPAQueryFactory jpaQueryFactory() { return new JPAQueryFactory(em); }
+
 	@Bean
 	public CommandLineRunner setUp(BoardRepository boardRepository
 								,MemberRepository memberRepository){
@@ -41,10 +45,10 @@ public class JPAConfig {
 									       .rule(MemberRules.ADMIN)
 									       .name("테스트")
 									       .build());
-			
-			
+
+
 			List<Board> boards = new ArrayList<Board>();
-		
+
 			for(int i=0; i<10; i++) {
 				Board savedBoard = Board.builder()
 										.title("제목"+i)

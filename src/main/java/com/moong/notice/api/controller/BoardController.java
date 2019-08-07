@@ -2,6 +2,7 @@ package com.moong.notice.api.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.moong.notice.api.response.ApiResponse;
 import com.moong.notice.aspect.BoardValidation;
+import com.moong.notice.domain.board.Board;
 import com.moong.notice.domain.member.MemberRules;
 import com.moong.notice.service.BoardService;
 import com.moong.notice.service.dto.BoardParam;
@@ -35,30 +37,29 @@ public class BoardController {
 	private final BoardService boardService;
 	
 	@GetMapping(value={"/{page}"})
-	public ApiResponse<?> getBoards(
+	public ApiResponse< Page<Board> > getBoards(
 			@PathVariable("page") Integer page
 		   ,@Valid SearchParam params ){
 		return ApiResponse.ok(boardService.findAll(page, params));
 	}
 	
 	@PostMapping(path="/")
-	public ApiResponse<?> createBoard(@RequestBody @Valid BoardParam board ){
+	public ApiResponse<Board> createBoard(@RequestBody @Valid BoardParam board ){
 		return ApiResponse.ok(boardService.save(board));
 	}
 	
 	//@PutMapping(path="/{id}") // <- 전체 리소스 바뀔 우려 때문에 Patch로 설정
 	@PatchMapping(path="/{id}")
-	public ApiResponse<?> updateBoard(
+	public ApiResponse<Integer> updateBoard(
 			@PathVariable("id") @Valid Long id
 		   ,@RequestBody @Valid BoardParam boardPrams){
 		return ApiResponse.ok(boardService.update(id, boardPrams));
 	}
 	
 	@DeleteMapping(path="/{id}")
-	public ApiResponse<?> deleteBoard(
+	public ApiResponse<String> deleteBoard(
 			@PathVariable("id") @Valid Long id){
 		boardService.delete(id);
 		return ApiResponse.ok("SUCCESS");
 	}
-	
 }
