@@ -1,33 +1,35 @@
 package com.moong.notice.repository;
 
+import com.moong.notice.config.JPAConfig;
 import com.moong.notice.domain.board.Board;
 import com.moong.notice.domain.board.BoardType;
 import com.moong.notice.domain.board.QBoard;
 import com.moong.notice.service.dto.SearchParam;
+import com.moong.notice.service.dto.SearchParam2;
 import com.moong.notice.service.dto.SelectOptions;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.Visitor;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nullable;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.validation.constraints.AssertTrue;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.moong.notice.domain.board.QBoard.board;
+
 
 /**
  * Created by gmun0929.work@gmail.com
@@ -38,61 +40,146 @@ import static com.moong.notice.domain.board.QBoard.board;
  * @since : 2019-08-04
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@Import(JPAConfig.class)
+@DataJpaTest
+@Transactional
 public class QDBoardRepositoryTest {
 
-    @PersistenceContext
-    private EntityManager em;
+    @Autowired private BoardRepository boardRepository;
+    @Autowired private JPAQueryFactory jpaQueryFactory;
+
+    private SearchParam2 params;
 
     @Before
-    public void setUp(){
-        em.persist(Board.builder()
-                        .title("test")
-                        .contents("테스트 용 내용")
-                        .type(BoardType.NOTICE)
-                        .build()
-                    );
+    public void setUp() {
+        params = new SearchParam2();
+        params.setType(BoardType.NOTICE);
+        params.setOptionKeyword(SelectOptions.TITLE);
+        params.setOptionDate(SelectOptions.CREATED_DATE);
+        params.setStaYmd( SearchParam.toLocalDateTime("2019-01-01") );
+        params.setEndYmd( SearchParam.toLocalDateTime("2019-12-30") );
+        params.setKeyword("test");
 
-        em.persist(Board.builder()
-                        .title("test2")
-                        .contents("테스트 용 내용")
-                        .type(BoardType.NOTICE)
-                        .build()
-                    );
-
-        em.flush();
+        boardRepository.saveAll(
+                Arrays.asList(
+                        Board.builder()
+                                .title("test2")
+                                .contents("테스트 용 내용")
+                                .type(BoardType.NOTICE)
+                                .build()
+                        ,Board.builder()
+                                .title("test2")
+                                .contents("테스트 용 내용")
+                                .type(BoardType.NOTICE)
+                                .build()
+                )
+        );
     }
 
-    @Transactional
+// switch 문을 Optional로 대체할 수 있을까?
+        @Test
+        public void isOptionalNullTest(){
+//        switch (params.getOptionKeyword()) {
+//            case WRITER     : bb.and( board.member.name.contains(keyword) );     break;
+//            case TITLE      : bb.and( board.title.contains(keyword) );           break;
+//            case CONTENTS   : bb.and( board.contents.contains(keyword) );        break;
+//            default:
+//            if (StringUtils.isEmpty(keyword)) {
+////                return null;
+//            } else {
+//                throw new RuntimeException("선택된 키워드가 없습니다.");
+//            }
+//        }
+            final BooleanBuilder bb = new BooleanBuilder();
+            final String keyword = params.getKeyword();
+
+            /*
+            * if/else 또는 switch 문 같은 논리 문법을 foreach로 해결
+            * */
+            Optional optOptions = Optional.of(params.getOptionKeyword());
+            System.err.println(
+                            optOptions
+                                .filter(option -> option.equals(SelectOptions.TITLE))
+                                .map( option -> bb.and(QBoard.board.member.name.contains(keyword)) )
+
+//                    .orElseGet(() -> )
+//                    .ifPresent(option -> System.out.println(option.getOption()) )
+//                    .
+//                    .orElseThrow( () -> new RuntimeException("선택된 키워드가 없습니다.") )
+
+
+
+            );
+    }
+
     @Test
-    public void isQueryDSL(){
-        JPAQuery<Board> query = new JPAQuery(em);
-//        [1] 직접 지정
-//        QBoard qBoard = new QBoard("m"); // 생성되는 JPQL의 별칭이 m
-//        QBoard qBoard = QBoard.board; // 기본 인스턴스 활용
-//
-//                        WHERE b.type = :#{#params.type} "
-//                + "       AND CASE :#{#params.option_keyword}"
-//                + "     	       WHEN 'WRITER'   THEN m.name LIKE CONCAT('%', :#{#params.keyword}, '%')"
-//                + "     	       WHEN 'TITLE'    THEN b.title LIKE CONCAT('%', :#{#params.keyword}, '%')"
-//                + "     	       WHEN 'CONTENTS' THEN b.contents LIKE CONCAT('%', :#{#params.keyword}, '%')"
-//                + "     	       END "
-//                + "       AND CASE :#{#params.option_date} "
-//                + "     		   WHEN 'CREATED_DATE' 		THEN	b.create_date BETWEEN :#{#params.sta_ymd} AND :#{#params.end_ymd} "
-//                + "     		   WHEN 'MODIFED_DATE' 		THEN	b.mod_date BETWEEN :#{#params.sta_ymd} AND :#{#params.end_ymd} "
-//                + "     		   END "
-        SearchParam sp = new SearchParam();
-        sp.setOption_keyword(SelectOptions.WRITER.getOption());
+    public void isQueryDSL() {
+        System.err.println("=================");
+        System.err.println("=================");
+        System.err.println(boardRepository.findAll());
 
-        final List<SelectOptions> keywordOptions = Arrays.asList( SelectOptions.TITLE, SelectOptions.CONTENTS, SelectOptions.WRITER );
-        final List<SelectOptions> dateOptions    = Arrays.asList( SelectOptions.CREATED_DATE, SelectOptions.MODIFED_DATE );
+//        JPAQuery<Board> query = new JPAQuery(em);
+        JPAQuery<Board> query = jpaQueryFactory.selectFrom(board);
 
-//        Predicate<SelectOptions> condition1 = keywordOptions::contains;
-        SelectOptions option1 = SelectOptions.TITLE;
-        SelectOptions option2 = SelectOptions.MODIFED_DATE;
-        String keyword = "Test";
+        List<Board> boards = query //.from(board)// 기본 인스턴스 활용
+                .where(
+                         getSearchCondition(params)
+                )
+                .orderBy(board.id.asc())
+                .fetch(); // list(board)
 
-        // where 절에 null 올 경우 조건문에서 생략됨
+        System.err.println("=================");
+        System.err.println("=================");
+        System.err.println("=================");
+        System.err.println(boards);
+    }
+
+    private BooleanBuilder getSearchCondition(final SearchParam2 params) {
+//        CaseBuilder cb = new CaseBuilder();
+        final BooleanBuilder bb = new BooleanBuilder();
+
+        if(params.getType() != null) {
+           bb.and(board.type.eq(params.getType()));
+        }
+
+        final String        keyword     = params.getKeyword();
+        final LocalDateTime staYmd      = params.getStaYmd();
+        final LocalDateTime endYmd      = params.getEndYmd();
+
+
+        switch (params.getOptionKeyword()) {
+            case WRITER     : bb.and( board.member.name.contains(keyword) );     break;
+            case TITLE      : bb.and( board.title.contains(keyword) );           break;
+            case CONTENTS   : bb.and( board.contents.contains(keyword) );        break;
+            default:
+                return validPrarms(keyword);
+        }
+
+        switch (params.getOptionDate()) {
+            case CREATED_DATE: bb.and( board.createdDate.between(staYmd, endYmd) );     break;
+            case MODIFED_DATE: bb.and( board.modifiedDate.between(staYmd, endYmd) );    break;
+            default:
+                return validPrarms(keyword);
+        }
+        return bb;
+    }
+
+    private BooleanBuilder validPrarms(String keyword) {
+        if (StringUtils.isEmpty(keyword)) {
+            return null;
+        } else {
+            throw new RuntimeException("선택된 키워드가 없습니다.");
+        }
+    }
+
+
+    /*
+    * if문을 개선할 순 없을까 ?
+    * */
+
+
+
+    // where 절에 null 올 경우 조건문에서 생략됨
 //        BooleanExpression be = opti
 //
 //        JPAExpressions.
@@ -106,27 +193,5 @@ public class QDBoardRepositoryTest {
 //
 //                ;
 
-        // case - when - then
-//        CaseBuilder cb = new CaseBuilder()
-//                                .when(
-//                                        board.contents.eq
-////                                        Stream.of(option1).anyMatch(option -> keywordOptions.contains(option))
-//
-//                                );
-        List<Board> boards = query.from(board)// 기본 인스턴스 활용
-                                  .where(
-                                          board.type.eq(BoardType.NOTICE)
-                                          .and(
-                                            board.title.eq("test")
-                                          )
-
-                                  )
-                                  .orderBy(board.id.asc())
-                                  .fetch(); // list(board)
-
-        System.out.println("=================");
-        System.out.println("=================");
-        System.out.println("=================");
-        System.out.println(boards);
-    }
+//        Predicate<SelectOptions> condition1 = keywordOptions::contains;
 }

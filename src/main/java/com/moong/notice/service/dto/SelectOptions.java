@@ -5,6 +5,8 @@ import com.moong.notice.api.advice.exception.SelectOptionNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.stream.Stream;
+
 /**
  * <p>화면 Select 기준 값
  * <li> 1 TITLE
@@ -25,15 +27,15 @@ public enum SelectOptions {
 	;
 	
 	private final int option;
-	
-	public static SelectOptions of(int option) {
-		switch (option) {
-			case 1: return SelectOptions.TITLE;
-			case 2: return SelectOptions.CREATED_DATE;
-			case 3: return SelectOptions.WRITER;
-			case 4: return SelectOptions.MODIFED_DATE;
-			case 5: return SelectOptions.CONTENTS;
-			default: throw new SelectOptionNotFoundException(option);
-		}
+
+	public static SelectOptions of(final int option) {
+		final SelectOptions[] options = SelectOptions.values();
+		return Stream.of(options)
+				.filter(o -> o.getOption() == option)
+				.findFirst()
+				.orElseThrow(() -> {
+					throw new SelectOptionNotFoundException(option);
+				});
 	}
+
 }

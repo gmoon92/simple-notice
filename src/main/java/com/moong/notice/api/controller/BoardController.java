@@ -3,7 +3,6 @@ package com.moong.notice.api.controller;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -14,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moong.notice.api.response.ApiResponse;
-import com.moong.notice.aspect.BoardValidation;
 import com.moong.notice.domain.board.Board;
-import com.moong.notice.domain.member.MemberRules;
 import com.moong.notice.service.BoardService;
 import com.moong.notice.service.dto.BoardParam;
 import com.moong.notice.service.dto.SearchParam;

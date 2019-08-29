@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
-@Getter @NoArgsConstructor @ToString(exclude="member")
+@Getter @NoArgsConstructor @ToString(exclude="member", callSuper = true)
 @AttributeOverrides({
 			 @AttributeOverride(name="createdDate", column=@Column(name="CREATE_DATE"))
 			,@AttributeOverride(name="modifiedDate", column=@Column(name="MOD_DATE"))

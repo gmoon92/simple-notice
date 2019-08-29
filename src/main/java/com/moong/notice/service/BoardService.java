@@ -10,13 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.moong.notice.aspect.BoardValidation;
 import com.moong.notice.domain.board.Board;
-import com.moong.notice.domain.member.Member;
 import com.moong.notice.domain.member.MemberRules;
 import com.moong.notice.repository.BoardRepository;
-import com.moong.notice.repository.MemberRepository;
 import com.moong.notice.service.dto.BoardParam;
 import com.moong.notice.service.dto.SearchParam;
-import com.moong.notice.service.dto.SelectOptions;
 
 import lombok.RequiredArgsConstructor;
 

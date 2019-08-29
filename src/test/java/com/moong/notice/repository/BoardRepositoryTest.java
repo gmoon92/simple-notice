@@ -8,7 +8,6 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 
 import org.junit.Before;
 import org.junit.Test;
